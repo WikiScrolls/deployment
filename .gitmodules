@@ -1,0 +1,3 @@
+[submodule "pagerank"]
+	path = pagerank
+	url = https://github.com/WikiScrolls/pagerank.git
