@@ -1,5 +1,6 @@
 services:
   graph_db:
+    container_name: neo4j
     image: neo4j:5
     ports:
       - "7474:7474"
