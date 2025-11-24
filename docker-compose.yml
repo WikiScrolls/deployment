@@ -32,7 +32,7 @@ services:
       graph_db:
         condition: service_healthy
     environment:
-      - NEO4J_URI=neo4j://graph_db:7687
+      - NEO4J_URI=neo4j://neo4j:7687
       - GIN_MODE=release
     networks:
       - cloudflared
