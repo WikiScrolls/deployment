@@ -8,17 +8,19 @@ services:
       - NEO4J_AUTH=neo4j/wikiscrolls
       - NEO4J_server_memory_heap_max__size=5G
       - NEO4J_server_memory_pagecache_size=4G
-      - NEO4J_PLUGINS='["graph-data-science"]'
+      - NEO4J_PLUGINS=["graph-data-science"]
     volumes:
       - ./neo4j-volume/data:/data
       - ./neo4j-volume/import:/import
       - ./neo4j-volume/plugins:/plugins
     healthcheck:
       test: wget http://localhost:7474 || exit 1
-      interval: 1s
-      timeout: 10s
+      interval: 3s
+      timeout: 5s
       retries: 20
-      start_period: 3s
+      start_period: 40s
+    networks:
+      - local
 
   pagerank:
     build: ./pagerank
@@ -29,3 +31,24 @@ services:
         condition: service_healthy
     environment:
       - NEO4J_URI=neo4j://graph_db:7687
+    networks:
+      - cloudflared
+      - local
+
+  # Zero Trust tunnel
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: cloudflared
+    environment:
+      - TZ=Asia/Jakarta
+      - TUNNEL_TOKEN=${TOKEN}
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    networks:
+      - cloudflared
+
+networks:
+  cloudflared:
+    name: cloudflared
+  local:
+    name: local

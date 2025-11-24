@@ -1,3 +1,6 @@
 [submodule "pagerank"]
 	path = pagerank
 	url = https://github.com/WikiScrolls/pagerank.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/WikiScrolls/backend.git
