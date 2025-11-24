@@ -1,0 +1,31 @@
+services:
+  graph_db:
+    image: neo4j:5
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/wikiscrolls
+      - NEO4J_server_memory_heap_max__size=5G
+      - NEO4J_server_memory_pagecache_size=4G
+      - NEO4J_PLUGINS='["graph-data-science"]'
+    volumes:
+      - ./neo4j-volume/data:/data
+      - ./neo4j-volume/import:/import
+      - ./neo4j-volume/plugins:/plugins
+    healthcheck:
+      test: wget http://localhost:7474 || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 20
+      start_period: 3s
+
+  pagerank:
+    build: ./pagerank
+    ports:
+      - "3000:3000"
+    depends_on:
+      graph_db:
+        condition: service_healthy
+    environment:
+      - NEO4J_URI=neo4j://graph_db:7687
