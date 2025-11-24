@@ -23,19 +23,22 @@ services:
       - local
 
   pagerank:
+    container_name: pagerank
     build: ./pagerank
     ports:
-      - "8888:3000"
+      - "3333:3000"
     depends_on:
       graph_db:
         condition: service_healthy
     environment:
       - NEO4J_URI=neo4j://graph_db:7687
+      - GIN_MODE=release
     networks:
       - cloudflared
       - local
 
   backend:
+    container_name: backend
     build: ./backend
     ports:
       - "3000:3000"
