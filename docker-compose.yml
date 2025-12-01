@@ -20,8 +20,6 @@ services:
   mysql:
     image: mysql/mysql-server
     restart: unless-stopped
-    ports:
-      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: root_pass
       MYSQL_DATABASE: gorse
