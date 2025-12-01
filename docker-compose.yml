@@ -16,6 +16,8 @@ services:
     restart: unless-stopped
     ports:
       - 6379:6379
+    networks:
+      - local
 
   mysql:
     image: mysql/mysql-server
@@ -27,6 +29,8 @@ services:
       MYSQL_DATABASE: gorse
       MYSQL_USER: gorse
       MYSQL_PASSWORD: gorse_pass
+    networks:
+      - local
 
   gorse:
     image: zhenghaoz/gorse-in-one
@@ -49,25 +53,27 @@ services:
     depends_on:
       - redis
       - mysql
+    networks:
+      - local
 
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - cloudflared
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    networks:
+      - cloudflared
 
-  # # Zero Trust tunnel
-  # cloudflared:
-  #   image: cloudflare/cloudflared
-  #   container_name: cloudflared
-  #   environment:
-  #     - TZ=Asia/Jakarta
-  #     - TUNNEL_TOKEN=${TOKEN}
-  #   restart: unless-stopped
-  #   command: tunnel --no-autoupdate run
-  #   networks:
-  #     - cloudflared
+  # Zero Trust tunnel
+  cloudflared:
+    image: cloudflare/cloudflared
+    container_name: cloudflared
+    environment:
+      - TZ=Asia/Jakarta
+      - TUNNEL_TOKEN=${TOKEN}
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    networks:
+      - cloudflared
 
 networks:
   cloudflared:
