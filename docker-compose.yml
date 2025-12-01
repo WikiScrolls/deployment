@@ -56,12 +56,12 @@ services:
     networks:
       - local
 
-  backend:
-    build: ./backend
-    ports:
-      - "3000:3000"
-    networks:
-      - cloudflared
+  # backend:
+  #   build: ./backend
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - cloudflared
 
   # Zero Trust tunnel
   cloudflared:
