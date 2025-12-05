@@ -52,12 +52,14 @@ services:
     networks:
       - local
 
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - cloudflared
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    networks:
+      - cloudflared
 
   # Zero Trust tunnel
   cloudflared:
